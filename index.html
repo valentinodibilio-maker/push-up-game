@@ -2,541 +2,169 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Push-Up Boss Slayer</title>
-
-    <!-- Librerie Google MediaPipe Pose per AI e Fotocamera -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI Push-Up Boss Slayer - FIXED</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
-
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #1a1a2e;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .game-container {
-            max-width: 600px;
-            width: 100%;
-            background: #16213e;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-            text-align: center;
-        }
-
-        header {
-            border-bottom: 2px solid #0f3460;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-        }
-
-        .stats {
-            margin: 10px 0;
-            font-size: 1.05em;
-            line-height: 1.5;
-        }
-
-        .boss-card {
-            background: #0f3460;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 15px 0;
-        }
-
-        .boss-avatar {
-            font-size: 80px;
-            margin: 15px 0;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .hp-bar-container {
-            position: relative;
-            width: 100%;
-            height: 30px;
-            background: #444;
-            border-radius: 15px;
-            overflow: hidden;
-            margin: 15px 0;
-        }
-
-        .hp-bar-fill {
-            height: 100%;
-            width: 100%;
-            background: #e94560;
-            transition: width 0.2s ease;
-        }
-
-        .hp-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-weight: bold;
-            text-shadow: 1px 1px 2px #000;
-        }
-
-        button {
-            cursor: pointer;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            transition: transform 0.1s, background 0.2s;
-        }
-
-        button:active {
-            transform: scale(0.95);
-        }
-
-        button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        .btn-action {
-            background: #00b4d8;
-            color: white;
-            padding: 10px 20px;
-            font-size: 1em;
-            margin-top: 5px;
-        }
-
-        .btn-small {
-            background: #533483;
-            color: white;
-            padding: 6px 12px;
-        }
-
-        .boss-selector {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* FOTOCAMERA E CANVAS */
-        .camera-box {
-            background: #0f3460;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-        }
-
-        .video-container {
-            position: relative;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-        }
-
-        canvas {
-            border-radius: 8px;
-            background-color: #000;
-            max-width: 100%;
-            height: auto;
-        }
-
-        .status-text {
-            margin-top: 10px;
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-
-        .shop-section, .leaderboard-section {
-            margin-top: 25px;
-            background: #0f3460;
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .shop-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #16213e;
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 6px;
-            text-align: left;
-        }
-
-        .leaderboard-form {
-            margin: 10px 0;
-            display: flex;
-            gap: 10px;
-        }
-
-        .leaderboard-form input {
-            flex: 1;
-            padding: 8px;
-            border-radius: 4px;
-            border: none;
-        }
-
-        ol {
-            text-align: left;
-            padding-left: 20px;
-            margin-top: 10px;
-        }
-
-        li {
-            margin: 5px 0;
-        }
+        *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+        body{background:#1a1a2e;color:#fff;display:flex;justify-content:center;padding:10px}
+       .game-container{max-width:500px;width:100%;background:#16213e;padding:15px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.5);text-align:center}
+        header{border-bottom:2px solid #0f3460;padding-bottom:12px;margin-bottom:15px}
+       .stats{margin:8px 0;font-size:.95em;line-height:1.4}
+       .boss-card{background:#0f3460;padding:15px;border-radius:10px;margin:12px 0}
+       .boss-avatar{font-size:65px;margin:10px 0;animation:bounce 2s infinite}
+        @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+       .hp-bar-container{position:relative;width:100%;height:26px;background:#444;border-radius:13px;overflow:hidden;margin:12px 0}
+       .hp-bar-fill{height:100%;background:#e94560;transition:width.2s}
+       .hp-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:bold;font-size:.85em;text-shadow:1px 1px 2px #000}
+        button{cursor:pointer;border:none;border-radius:6px;font-weight:bold;transition:transform.1s}
+        button:active{transform:scale(.95)}button:disabled{opacity:.4;cursor:not-allowed}
+       .btn-action{background:#00b4d8;color:#fff;padding:12px 20px;font-size:1em;width:100%;border-radius:8px}
+       .btn-small{background:#533483;color:#fff;padding:8px 12px;font-size:.85em}
+       .boss-selector{display:flex;justify-content:space-between;align-items:center}
+       .camera-box{background:#0f3460;padding:12px;border-radius:10px;margin-top:12px}
+        canvas{border-radius:8px;background:#000;width:100%;max-width:320px;height:auto}
+       .status-text{margin-top:10px;font-size:1em;font-weight:bold}
+       .shop-section,.leaderboard-section{margin-top:20px;background:#0f3460;padding:12px;border-radius:10px}
+       .shop-item{display:flex;justify-content:space-between;align-items:center;background:#16213e;padding:10px;margin:8px 0;border-radius:6px;text-align:left;font-size:.9em}
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <!-- HEADER / INFO GIOCATORE -->
-        <header>
-            <h1>🏋️ AI Push-Up Boss Slayer</h1>
-            <div class="stats">
-                <p>💎 Gemme: <span id="gems">0</span></p>
-                <p>📅 Giorni trascorsi: <span id="days">1</span></p>
-                <p>🗡️ Arma attuale: <span id="weapon-name">Coltello di Legno</span> (Danno: <span id="weapon-damage">1</span>)</p>
-            </div>
-            <button id="btn-next-day" class="btn-action">☀️ Passa al Giorno Successivo</button>
-        </header>
+<div class="game-container">
+<header>
+<h1>🏋️ AI Push-Up Boss Slayer</h1>
+<div class="stats">
+<p>💎 Gemme: <span id="gems">0</span></p>
+<p>📅 Giorni: <span id="days">1</span></p>
+<p>🗡️ Arma: <span id="weapon-name">Coltello</span> (<span id="weapon-damage">1</span>)</p>
+</div>
+<button id="btn-next-day" class="btn-action" style="margin-top:5px">☀️ Giorno Successivo</button>
+</header>
 
-        <!-- SEZIONE BOSS E FOTOCAMERA -->
-        <main class="boss-section">
-            <div class="boss-selector">
-                <button id="btn-prev-boss" class="btn-small">⬅️ Boss Prec.</button>
-                <span id="boss-level-display">Boss #1</span>
-                <button id="btn-next-boss" class="btn-small">Boss Succ. ➡️</button>
-            </div>
+<div class="boss-selector">
+<button id="btn-prev-boss" class="btn-small">⬅️ Prec.</button>
+<span id="boss-level-display" style="font-weight:bold">Boss #1</span>
+<button id="btn-next-boss" class="btn-small">Succ. ➡️</button>
+</div>
+<div class="boss-card">
+<h2 id="boss-name">Goblin</h2>
+<div class="boss-avatar" id="boss-avatar">👺</div>
+<div class="hp-bar-container"><div class="hp-bar-fill" id="hp-bar"></div><span id="hp-text" class="hp-text">10 / 10</span></div>
+<p>Ricompensa: <span id="boss-gems-reward">5</span> 💎</p>
+</div>
 
-            <div class="boss-card">
-                <h2 id="boss-name">Goblin Allenatore</h2>
-                <div class="boss-avatar" id="boss-avatar">👺</div>
-                
-                <!-- Barra della Vita -->
-                <div class="hp-bar-container">
-                    <div class="hp-bar-fill" id="hp-bar"></div>
-                    <span id="hp-text" class="hp-text">10 / 10 HP</span>
-                </div>
+<div class="camera-box">
+<button id="btn-start-cam" class="btn-action" style="background:#e94560">📷 Attiva Fotocamera</button>
+<video id="webcam" playsinline style="display:none"></video>
+<canvas id="output_canvas" width="320" height="240" style="display:none;margin:10px auto"></canvas>
+<p class="status-text">Stato: <span id="pushup-status" style="color:#00b4d8">Pronto</span></p>
+</div>
 
-                <p>Ricompensa: <span id="boss-gems-reward">5</span> 💎</p>
-            </div>
+<section class="shop-section"><h2>🛒 Negozio</h2><div id="shop-list"></div></section>
+</div>
 
-            <!-- SEZIONE FOTOCAMERA E RILEVAMENTO -->
-            <div class="camera-box">
-                <button id="btn-start-cam" class="btn-action" style="background:#e94560; font-size: 1.1em; width: 100%;">📷 Attiva Fotocamera per Giocare</button>
-                <div class="video-container">
-                    <video id="webcam" autoplay playsinline style="display:none;"></video>
-                    <canvas id="output_canvas" width="320" height="240" style="display:none;"></canvas>
-                </div>
-                <p class="status-text">Stato: <span id="pushup-status" style="color: #00b4d8;">Inattivo</span></p>
-            </div>
-        </main>
+<script>
+const BOSSES=[
+{id:1,name:"Goblin Allenatore",hp:10,gems:5,icon:"👺"},{id:2,name:"Orco Warm-up",hp:25,gems:12,icon:"👹"},
+{id:3,name:"Scheletro Flessore",hp:60,gems:30,icon:"💀"},{id:4,name:"Minotauro Panca",hp:150,gems:75,icon:"🐂"},
+{id:5,name:"Golem",hp:400,gems:200,icon:"🗿"},{id:6,name:"Idra Flessioni",hp:1000,gems:500,icon:"🐍"},
+{id:7,name:"Demone Cardio",hp:3000,gems:1500,icon:"👿"},{id:18,name:"RE DEI 3 TRILIONI",hp:3000000000000,gems:1000000000000,icon:"👑"}
+];
+const WEAPONS=[
+{id:1,name:"Coltello di Legno",damage:1,cost:0},{id:2,name:"Pugnale di Ferro",damage:3,cost:15},
+{id:3,name:"Spada Acciaio",damage:10,cost:100},{id:4,name:"Spada d'Oro",damage:35,cost:500},
+{id:5,name:"Diamante",damage:120,cost:2500},{id:6,name:"Alabarda Mitica",damage:500,cost:12000}
+];
+let state={gems:0,days:1,currentWeaponIndex:0,currentBossIndex:0,unlockedBossIndex:0,bossHp:BOSSES[0].hp};
+let stage="UP"; let pose,camera;
 
-        <!-- NEGOZIO ARMI -->
-        <section class="shop-section">
-            <h2>🛒 Negozio Armi</h2>
-            <div id="shop-list" class="shop-list"></div>
-        </section>
+function formatNumber(n){
+if(n>=1e12) return (n/1e12).toFixed(2)+" T";
+if(n>=1e9) return (n/1e9).toFixed(2)+" B";
+if(n>=1e6) return (n/1e6).toFixed(2)+" M";
+if(n>=1e3) return (n/1e3).toFixed(1)+" K";
+return Math.floor(n).toString();
+}
+function saveGame(){localStorage.setItem('pushupGameSave',JSON.stringify(state))}
+function loadGame(){let s=localStorage.getItem('pushupGameSave'); if(s) state=JSON.parse(s)}
 
-        <!-- CLASSIFICA -->
-        <section class="leaderboard-section">
-            <h2>🏆 Classifica Anti-Cheat</h2>
-            <p style="font-size: 0.85em; opacity: 0.8;">Completa il gioco battendo l'ultimo boss per registrare il tempo!</p>
-            <div class="leaderboard-form">
-                <input type="text" id="player-name" placeholder="Il tuo Nickname">
-                <button id="btn-submit-score" class="btn-small">Salva Punteggio</button>
-            </div>
-            <ol id="leaderboard-list"></ol>
-        </section>
-    </div>
+function updateUI(){
+let boss=BOSSES[state.currentBossIndex]; let weapon=WEAPONS[state.currentWeaponIndex];
+document.getElementById('gems').innerText=formatNumber(state.gems);
+document.getElementById('days').innerText=state.days;
+document.getElementById('weapon-name').innerText=weapon.name;
+document.getElementById('weapon-damage').innerText=formatNumber(weapon.damage);
+document.getElementById('boss-level-display').innerText=`Boss ${boss.id}/${BOSSES.length}`;
+document.getElementById('boss-name').innerText=boss.name;
+document.getElementById('boss-avatar').innerText=boss.icon;
+document.getElementById('boss-gems-reward').innerText=formatNumber(boss.gems);
+let pct=Math.max(0,(state.bossHp/boss.hp)*100);
+document.getElementById('hp-bar').style.width=pct+'%';
+document.getElementById('hp-text').innerText=`${formatNumber(state.bossHp)} / ${formatNumber(boss.hp)}`;
+document.getElementById('btn-prev-boss').disabled=state.currentBossIndex===0;
+document.getElementById('btn-next-boss').disabled=state.currentBossIndex>=state.unlockedBossIndex;
+renderShop(); saveGame();
+}
+function calculateAngle(A,B,C){
+let rad=Math.atan2(C.y-B.y,C.x-B.x)-Math.atan2(A.y-B.y,A.x-B.x);
+let ang=Math.abs(rad*180/Math.PI); if(ang>180) ang=360-ang; return ang;
+}
+function onResults(results){
+let canvas=document.getElementById('output_canvas'); let ctx=canvas.getContext('2d');
+ctx.save(); ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.drawImage(results.image,0,0,canvas.width,canvas.height);
+if(results.poseLandmarks){
+ let lm=results.poseLandmarks;
+ let leftAngle=calculateAngle(lm[11],lm[13],lm[15]);
+ let rightAngle=calculateAngle(lm[12],lm[14],lm[16]);
+ let angle=Math.min(leftAngle,rightAngle); // più severo, anti-cheat
 
-    <!-- LOGICA DI GIOCO & AI -->
-    <script>
-        // --- CONFIGURAZIONE GIOCATORE E BOSS ---
-        const BOSSES = [
-            { id: 1, name: "Goblin Allenatore", hp: 10, gems: 5, icon: "👺" },
-            { id: 2, name: "Orco del Warm-up", hp: 25, gems: 12, icon: "👹" },
-            { id: 3, name: "Scheletro Flessore", hp: 60, gems: 30, icon: "💀" },
-            { id: 4, name: "Minotauro Panca Piana", hp: 150, gems: 75, icon: "🐂" },
-            { id: 5, name: "Golem di Calcestruzzo", hp: 400, gems: 200, icon: "🗿" },
-            { id: 6, name: "Idra delle Flessioni", hp: 1000, gems: 500, icon: "🐍" },
-            { id: 7, name: "Demone del Cardio", hp: 3000, gems: 1500, icon: "👿" },
-            { id: 8, name: "Cilindro di Titanio", hp: 10000, gems: 4500, icon: "🤖" },
-            { id: 9, name: "Drago dei Pettorali", hp: 35000, gems: 15000, icon: "🐉" },
-            { id: 10, name: "Titano dell'Ipertrofia", hp: 100000, gems: 45000, icon: "🧟" },
-            { id: 11, name: "Behemoth Incatenato", hp: 500000, gems: 200000, icon: "🧌" },
-            { id: 12, name: "Distruttore di Gravità", hp: 2500000, gems: 900000, icon: "👾" },
-            { id: 13, name: "Signore del Fitness", hp: 10000000, gems: 3500000, icon: "🧙‍♂️" },
-            { id: 14, name: "Entità Muscolare", hp: 100000000, gems: 30000000, icon: "🌌" },
-            { id: 15, name: "Colosso Galattico", hp: 1000000000, gems: 250000000, icon: "🪐" },
-            { id: 16, name: "Anomalia Cosmica", hp: 50000000000, gems: 10000000000, icon: "🌀" },
-            { id: 17, name: "Semidio dell'Acciaio", hp: 500000000000, gems: 80000000000, icon: "⚡" },
-            { id: 18, name: "RE DEI 3 TRILIONI", hp: 3000000000000, gems: 1000000000000, icon: "👑" }
-        ];
-
-        const WEAPONS = [
-            { id: 1, name: "Coltello di Legno", damage: 1, cost: 0 },
-            { id: 2, name: "Pugnale di Ferro", damage: 3, cost: 15 },
-            { id: 3, name: "Spada d'Acciaio", damage: 10, cost: 100 },
-            { id: 4, name: "Spada d'Oro", damage: 35, cost: 500 },
-            { id: 5, name: "Spada di Diamante", damage: 120, cost: 2500 },
-            { id: 6, name: "Alabarda Mitica", damage: 500, cost: 12000 },
-            { id: 7, name: "Lama di Ossidiana", damage: 2500, cost: 75000 },
-            { id: 8, name: "Spada Cosmica", damage: 15000, cost: 500000 },
-            { id: 9, name: "Sterminatrice Atomica", damage: 100000, cost: 5000000 },
-            { id: 10, name: "Distruttrice di Mondi", damage: 10000000, cost: 500000000 },
-            { id: 11, name: "Spada Divina dei 3 Trilioni", damage: 50000000000, cost: 100000000000 }
-        ];
-
-        let state = {
-            gems: 0,
-            days: 1,
-            currentWeaponIndex: 0,
-            currentBossIndex: 0,
-            unlockedBossIndex: 0,
-            bossHp: BOSSES[0].hp
-        };
-
-        let stage = "UP"; // Stato Push-Up: UP o DOWN
-        let pose;
-        let camera;
-
-        // Formatta grandi numeri
-        function formatNumber(num) {
-            if (num >= 1e12) return (num / 1e12).toFixed(2) + " T (Trilioni)";
-            if (num >= 1e9) return (num / 1e9).toFixed(2) + " B (Miliardi)";
-            if (num >= 1e6) return (num / 1e6).toFixed(2) + " M (Milioni)";
-            if (num >= 1e3) return (num / 1e3).toFixed(2) + " K";
-            return num.toLocaleString();
-        }
-
-        function saveGame() {
-            localStorage.setItem('pushupGameSave', JSON.stringify(state));
-        }
-
-        function loadGame() {
-            const saved = localStorage.getItem('pushupGameSave');
-            if (saved) state = JSON.parse(saved);
-        }
-
-        function updateUI() {
-            const boss = BOSSES[state.currentBossIndex];
-            const weapon = WEAPONS[state.currentWeaponIndex];
-
-            document.getElementById('gems').innerText = formatNumber(state.gems);
-            document.getElementById('days').innerText = state.days;
-            document.getElementById('weapon-name').innerText = weapon.name;
-            document.getElementById('weapon-damage').innerText = formatNumber(weapon.damage);
-
-            document.getElementById('boss-level-display').innerText = `Boss ${boss.id} di ${BOSSES.length}`;
-            document.getElementById('boss-name').innerText = boss.name;
-            document.getElementById('boss-avatar').innerText = boss.icon;
-            document.getElementById('boss-gems-reward').innerText = formatNumber(boss.gems);
-
-            const hpPercent = Math.max(0, (state.bossHp / boss.hp) * 100);
-            document.getElementById('hp-bar').style.width = hpPercent + '%';
-            document.getElementById('hp-text').innerText = `${formatNumber(state.bossHp)} / ${formatNumber(boss.hp)} HP`;
-
-            document.getElementById('btn-prev-boss').disabled = state.currentBossIndex === 0;
-            document.getElementById('btn-next-boss').disabled = state.currentBossIndex >= state.unlockedBossIndex;
-
-            renderShop();
-            saveGame();
-        }
-
-        // --- RILEVAMENTO PUSH-UP AI (MediaPipe) ---
-        function calculateAngle(A, B, C) {
-            let radians = Math.atan2(C.y - B.y, C.x - B.x) - Math.atan2(A.y - B.y, A.x - B.x);
-            let angle = Math.abs((radians * 180.0) / Math.PI);
-            if (angle > 180.0) angle = 360 - angle;
-            return angle;
-        }
-
-        function onResults(results) {
-            const canvasElement = document.getElementById('output_canvas');
-            const canvasCtx = canvasElement.getContext('2d');
-            
-            canvasCtx.save();
-            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-            canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
-
-            if (results.poseLandmarks) {
-                // Spalla, Gomito e Polso sinistro
-                const shoulder = results.poseLandmarks[11];
-                const elbow = results.poseLandmarks[13];
-                const wrist = results.poseLandmarks[15];
-
-                if (shoulder && elbow && wrist) {
-                    const angle = calculateAngle(shoulder, elbow, wrist);
-
-                    // 1. Piegamento (Discesa)
-                    if (angle < 90 && stage === "UP") {
-                        stage = "DOWN";
-                        const status = document.getElementById('pushup-status');
-                        status.innerText = "⬇️ GIÙ (Ora Sali!)";
-                        status.style.color = "#ffd166";
-                    }
-                    
-                    // 2. Distensione (Salita) -> PUSH-UP VALIDO!
-                    if (angle > 160 && stage === "DOWN") {
-                        stage = "UP";
-                        const status = document.getElementById('pushup-status');
-                        status.innerText = "✅ PUSH-UP VALIDO!";
-                        status.style.color = "#06d6a0";
-                        
-                        // Infliggi il Danno
-                        doPushupDamage();
-                    }
-                }
-            }
-            canvasCtx.restore();
-        }
-
-        function doPushupDamage() {
-            const weapon = WEAPONS[state.currentWeaponIndex];
-            state.bossHp -= weapon.damage;
-
-            if (state.bossHp <= 0) {
-                const boss = BOSSES[state.currentBossIndex];
-                state.gems += boss.gems;
-                alert(`🎉 Hai sconfitto ${boss.name}! Guadagni ${formatNumber(boss.gems)} gemme!`);
-
-                if (state.currentBossIndex === state.unlockedBossIndex && state.unlockedBossIndex < BOSSES.length - 1) {
-                    state.unlockedBossIndex++;
-                    state.currentBossIndex++;
-                }
-
-                if (boss.id === 18) {
-                    alert(`🏆 VITTORIA FINALE! Hai sconfitto il Boss dei 3 Trilioni in ${state.days} Giorni! Registrati in classifica!`);
-                }
-
-                state.bossHp = BOSSES[state.currentBossIndex].hp;
-            }
-            updateUI();
-        }
-
-        // --- AVVIO FOTOCAMERA ---
-        document.getElementById('btn-start-cam').addEventListener('click', () => {
-            const videoElement = document.getElementById('webcam');
-            const canvasElement = document.getElementById('output_canvas');
-
-            pose = new Pose({
-                locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
-            });
-
-            pose.setOptions({
-                modelComplexity: 1,
-                smoothLandmarks: true,
-                minDetectionConfidence: 0.5,
-                minTrackingConfidence: 0.5
-            });
-
-            pose.onResults(onResults);
-
-            camera = new Camera(videoElement, {
-                onFrame: async () => {
-                    await pose.send({ image: videoElement });
-                },
-                width: 320,
-                height: 240
-            });
-
-            camera.start();
-            document.getElementById('btn-start-cam').style.display = 'none';
-            canvasElement.style.display = 'block';
-            document.getElementById('pushup-status').innerText = "Inquadrati di lato e inizia!";
-        });
-
-        // --- GESTIONE CONTROLLI & NEGOZIO ---
-        document.getElementById('btn-next-day').addEventListener('click', () => {
-            if (confirm("Vuoi terminare la giornata e passare al giorno successivo?")) {
-                state.days++;
-                updateUI();
-            }
-        });
-
-        document.getElementById('btn-prev-boss').addEventListener('click', () => {
-            if (state.currentBossIndex > 0) {
-                state.currentBossIndex--;
-                state.bossHp = BOSSES[state.currentBossIndex].hp;
-                updateUI();
-            }
-        });
-
-        document.getElementById('btn-next-boss').addEventListener('click', () => {
-            if (state.currentBossIndex < state.unlockedBossIndex) {
-                state.currentBossIndex++;
-                state.bossHp = BOSSES[state.currentBossIndex].hp;
-                updateUI();
-            }
-        });
-
-        function renderShop() {
-            const shopList = document.getElementById('shop-list');
-            shopList.innerHTML = '';
-
-            WEAPONS.forEach((w, index) => {
-                const div = document.createElement('div');
-                div.className = 'shop-item';
-                
-                const isOwned = index <= state.currentWeaponIndex;
-                const canBuy = state.gems >= w.cost && index === state.currentWeaponIndex + 1;
-
-                div.innerHTML = `
-                    <div>
-                        <strong>${w.name}</strong><br>
-                        🗡️ Danno: ${formatNumber(w.damage)}
-                    </div>
-                    <div>
-                        ${isOwned 
-                            ? '<span style="color:#06d6a0;">✔️ Posseduta</span>' 
-                            : `<button class="btn-small" onclick="buyWeapon(${index})" ${!canBuy ? 'disabled' : ''}>
-                                Compra (${formatNumber(w.cost)} 💎)
-                               </button>`
-                        }
-                    </div>
-                `;
-                shopList.appendChild(div);
-            });
-        }
-
-        window.buyWeapon = function(index) {
-            const w = WEAPONS[index];
-            if (state.gems >= w.cost) {
-                state.gems -= w.cost;
-                state.currentWeaponIndex = index;
-                updateUI();
-            }
-        };
-
-        // --- CLASSIFICA ---
-        function loadLeaderboard() {
-            const scores = JSON.parse(localStorage.getItem('pushupLeaderboard') || '[]');
-            const list = document.getElementById('leaderboard-list');
-            list.innerHTML = '';
-            scores.sort((a, b) => a.days - b.days);
-
-            scores.forEach(s => {
-                const li = document.createElement('li');
-                li.innerText = `${s.name}: ${s.days} Giorni`;
-                list.appendChild(li);
-            });
-        }
-
-        document.getElementById('btn-submit-score').addEventListener('click', () => {
-            const name = document.getElementById('player-name').value.trim();
-            if (!name) return alert("Inserisci un nickname!");
-
- 
+ if(angle < 90 && stage==="UP"){
+   stage="DOWN";
+   document.getElementById('pushup-status').innerText="⬇️ GIU' - Ora spingi!";
+   document.getElementById('pushup-status').style.color="#ffd166";
+ }
+ if(angle > 160 && stage==="DOWN"){
+   stage="UP";
+   document.getElementById('pushup-status').innerText="✅ VALIDO!";
+   document.getElementById('pushup-status').style.color="#06d6a0";
+   doPushupDamage();
+ }
+}
+ctx.restore();
+}
+function doPushupDamage(){
+let weapon=WEAPONS[state.currentWeaponIndex];
+state.bossHp-=weapon.damage;
+if(state.bossHp<=0){
+ let boss=BOSSES[state.currentBossIndex];
+ state.gems+=boss.gems;
+ if(state.currentBossIndex===state.unlockedBossIndex && state.unlockedBossIndex<BOSSES.length-1){
+   state.unlockedBossIndex++; state.currentBossIndex++;
+ }
+ state.bossHp=BOSSES[state.currentBossIndex].hp;
+}
+updateUI();
+}
+document.getElementById('btn-start-cam').addEventListener('click', async()=>{
+let video=document.getElementById('webcam'); let canvas=document.getElementById('output_canvas');
+let status=document.getElementById('pushup-status');
+status.innerText="Caricamento AI...";
+try{
+ pose=new Pose({locateFile:(f)=>`https://cdn.jsdelivr.net/npm/@mediapipe/pose/${f}`});
+ pose.setOptions({modelComplexity:0,smoothLandmarks:true,minDetectionConfidence:0.6,minTrackingConfidence:0.6});
+ pose.onResults(onResults);
+ camera=new Camera(video,{onFrame:async()=>{await pose.send({image:video})},width:640,height:480});
+ await camera.start();
+ document.getElementById('btn-start-cam').style.display='none';
+ canvas.style.display='block';
+ status.innerText="Attiva! Fai una flessione completa";
+}catch(e){
+ status.innerText="ERRORE: Usa HTTPS e dai permesso fotocamera";
+ alert(e.message);
+}
+});
+document.getElementById('btn-next-day').onclick=()=>{state.days++;updateUI()};
+document.getElementById('btn-prev-boss').onclick=()=>{if(state.currentBossIndex>0){state.currentBossIndex--;state.bossHp=BOSSES[state.currentBossIndex].hp;updateUI()}};
+document.getElementById('btn-next-boss').onclick=()=>
